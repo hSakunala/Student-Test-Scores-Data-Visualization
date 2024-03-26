@@ -48,7 +48,7 @@ app.layout = html.Div(className="parent", children=[
 @app.callback(Output('graph1', 'figure'), [Input('x-axis-dropdown', 'value'),Input('y-axis-dropdown', 'value')])
 def update_graph(x_axis_column, y_axis_column):
     avg_y = student_df.groupby(x_axis_column)[y_axis_column].mean().reset_index()
-    figure = px.bar(avg_y, x=x_axis_column, y=y_axis_column,text_auto=True)
+    figure = px.bar(avg_y, x=x_axis_column, y=y_axis_column,title="Average " + y_axis_column + " in relation to " + x_axis_column ,text_auto=True)
     figure.update_layout(plot_bgcolor="#f7f7f7")
     figure.update_yaxes(title_text=y_axis_column+' (average)')
     figure.update_traces(marker_color='rgb(158,202,225)', marker_line_color='rgb(8,48,107)', marker_line_width=1.5, opacity=0.6)
@@ -58,7 +58,7 @@ def update_graph(x_axis_column, y_axis_column):
 #Define callback function for graph 2
 @app.callback(Output('graph2', 'figure'),Input('radio', 'value'))
 def update_graph(selected_value):
-    figure = px.histogram(student_df, x=selected_value, labels={'x': selected_value, 'y': 'Score' }, title='Student Scores')
+    figure = px.histogram(student_df, x=selected_value, labels={'x': selected_value, 'y': 'Score' }, title='Student Scores Distribution for ' + selected_value)
     figure.update_layout(plot_bgcolor="#f7f7f7")
     figure.update_traces(marker_line_width=1,marker_line_color="white")
     figure.update_yaxes(title_text='Score')
@@ -77,7 +77,8 @@ def update_graph(x_axis_column, y_axis_column, slider_value):
 @app.callback(Output('graph4', 'figure'),Input('checklist1', 'value'))
 def update_graph(selected_values):
     avg_scores = student_df[selected_values].mean().reset_index()
-    figure = px.pie(avg_scores, values=avg_scores[0], names='index', title='Average Scores comparison for columns: '+ ', '.join(selected_values), 
+    avg_scores.rename(columns={'index': "Score Type",0: "Average Score"}, inplace=True)
+    figure = px.pie(avg_scores, values="Average Score",names= 'Score Type' , title='Average Scores comparison for Score Types: '+ ', '.join(selected_values), 
                     hole=0.3, color_discrete_sequence=px.colors.sequential.RdBu)
     figure.update_layout(plot_bgcolor="#f7f7f7")
     return figure 

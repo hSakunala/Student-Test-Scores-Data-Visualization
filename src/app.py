@@ -73,7 +73,7 @@ def update_graph(x_axis_column, y_axis_column, slider_value):
     figure.update_traces(marker_line_width=0.8, opacity=0.9)
     return figure
 
-#Define callback function for graph 4, for eahc numerical column selected, get the avergae score of that column and display it in a pie chart
+#Define callback function for graph 4
 @app.callback(Output('graph4', 'figure'),Input('checklist1', 'value'))
 def update_graph(selected_values):
     avg_scores = student_df[selected_values].mean().reset_index()
